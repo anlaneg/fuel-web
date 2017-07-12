@@ -34,3 +34,6 @@ test_run/*
 fuel-web-venv
 
 .bashrc
+.project
+.pydevproject
+nailgun/__init__.py
