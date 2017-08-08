@@ -37,3 +37,4 @@ fuel-web-venv
 .project
 .pydevproject
 nailgun/__init__.py
+.settings/
