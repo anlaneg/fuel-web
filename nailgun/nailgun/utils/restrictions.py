@@ -417,9 +417,10 @@ class ComponentsRestrictions(object):
         for component in available_components:
             available_components_names.add(component['name'])
             if component['name'] in components_names:
-                found_components.append(component)
+                found_components.append(component) #区分出满足要求的组件
 
         if len(components_names) != len(found_components):
+            #不是所有的组件均被满足，报错
             raise errors.InvalidData(
                 '{0} components are not related to used release.'.format(
                     sorted(components_names - available_components_names)
@@ -429,6 +430,7 @@ class ComponentsRestrictions(object):
 
         components_types_set = set()
         for component in found_components:
+            #检查已被满足的组件是否和我们要求使用的组件均在不兼容，存在则报异常
             cls._check_component_incompatibles(component, components_names)
             cls._check_component_requires(
                 component, components_names, available_components_names)
@@ -452,6 +454,7 @@ class ComponentsRestrictions(object):
                 cls._resolve_names_for_dependency(components_names,
                                                   incompatible['name'])
             )
+            #不兼容，报错
             if incompatible_component_names:
                 raise errors.InvalidData(
                     "Incompatible components were found: "
@@ -565,9 +568,12 @@ class ComponentsRestrictions(object):
     @staticmethod
     def _resolve_names_for_dependency(components_names, dependency_name):
         if '*' in dependency_name:
+            #如果包含通配符，则仅取通配符之前的
             prefix = dependency_name.split('*', 1)[0]
+            #返回可前缀匹配的组件名称
             return set(name for name in components_names
                        if name.startswith(prefix))
+        #返回可精确匹配的组件名称
         return set(name for name in components_names
                    if name == dependency_name)
 

@@ -64,6 +64,7 @@ class Node(Base):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), nullable=False,
                   default=lambda: str(uuid.uuid4()), unique=True)
+    #此节点位于那个集群
     cluster_id = Column(Integer, ForeignKey('clusters.id', ondelete='CASCADE'))
     group_id = Column(
         Integer,
@@ -71,6 +72,7 @@ class Node(Base):
         nullable=True
     )
     name = Column(Unicode(100))
+    #节点状态
     status = Column(
         Enum(*consts.NODE_STATUSES, name='node_status'),
         nullable=False,

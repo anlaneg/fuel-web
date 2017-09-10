@@ -71,8 +71,10 @@ class ClusterHandler(SingleHandler):
                * 400 (error occured while processing of data)
                * 404 (cluster not found in db)
         """
+        #提取操作对象
         obj = self.get_object_or_404(self.single, obj_id)
 
+        #校验操作数据
         data = self.checked_data(
             self.validator.validate_update,
             instance=obj

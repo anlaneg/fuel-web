@@ -42,24 +42,30 @@ class ClusterValidator(base.BasicValidator):
     @classmethod
     def _validate_common(cls, data, instance=None):
         d = cls.validate_json(data)
+        #取release_id
         release_id = d.get("release", d.get("release_id"))
         if release_id:
             release = objects.Release.get_by_uid(release_id)
             if not release:
+                #数据库无此release
                 raise errors.InvalidData(
                     "Invalid release ID", log_message=True)
             if not objects.Release.is_deployable(release):
+                #此release不可部署
                 raise errors.NotAllowed(
                     "Release with ID '{0}' is not deployable.".format(
                         release_id), log_message=True)
+            #检查是否支持此模式的部署
             cls._validate_mode(d, release)
 
         return d
 
     @classmethod
     def _validate_components(cls, release_id, components_list):
+        #取出此release包含的组件
         release = objects.Release.get_by_uid(release_id)
         release_components = objects.Release.get_all_components(release)
+        #检查组件间兼容问题，依赖问题是否满足
         ComponentsRestrictions.validate_components(
             components_list,
             release_components,
@@ -77,6 +83,7 @@ class ClusterValidator(base.BasicValidator):
                 u"Release ID is required", log_message=True)
 
         if "name" in d:
+            #检查此名称的环境是否已存在？
             if objects.ClusterCollection.filter_by(
                     None, name=d["name"]).first():
                 raise errors.AlreadyExists(
@@ -85,6 +92,7 @@ class ClusterValidator(base.BasicValidator):
                 )
 
         if "components" in d:
+            #有组件配置，校验组件
             cls._validate_components(release_id, d['components'])
 
         return d
@@ -122,6 +130,7 @@ class ClusterValidator(base.BasicValidator):
     @classmethod
     def _validate_mode(cls, data, release):
         mode = data.get("mode")
+        #release不支持此部署模式
         if mode and mode not in release.modes:
             modes_list = ', '.join(release.modes)
             raise errors.InvalidData(

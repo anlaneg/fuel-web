@@ -35,15 +35,18 @@ class BasicValidator(object):
     def validate_json(cls, data):
         # todo(ikutukov): this method not only validation json but also
         # returning parsed data
+        # 校验传入的data必须是一个可解析的json串
         if data:
             try:
                 res = jsonutils.loads(data)
             except Exception:
+                #不可解析，报错
                 raise errors.JsonDecodeError(
                     "Invalid json received",
                     log_message=True
                 )
         else:
+            #数据为空，错误
             raise errors.InvalidData(
                 "Empty request received",
                 log_message=True
@@ -54,6 +57,7 @@ class BasicValidator(object):
     def validate_request(cls, req, resource_type,
                          single_schema=None,
                          collection_schema=None):
+        #首先需要是一个合法的json串
         json_req = cls.validate_json(req)
 
         use_schema = {

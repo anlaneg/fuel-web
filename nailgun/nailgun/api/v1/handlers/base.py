@@ -178,6 +178,8 @@ class BaseHandler(object):
     @classmethod
     def checked_data(cls, validate_method=None, **kwargs):
         try:
+            #取出提供的数据，取出校验用的方法，调用函数进行校验
+            #如果调验不过，则报错
             data = kwargs.pop('data', web.data())
             method = validate_method or cls.validator.validate
             valid_data = method(data, **kwargs)
@@ -228,9 +230,12 @@ class BaseHandler(object):
         uid = kwargs.get("id", (args[0] if args else None))
         if uid is None:
             if log_404:
+                #按顺序，取logger的log-404[0]指定的方法，并输出log_404[1]
                 getattr(logger, log_404[0])(log_404[1])
+            #扔异常
             raise self.http(404, u'Invalid ID specified')
         else:
+            #指定了uuid后的处理
             instance = obj.get_by_uid(uid)
             if not instance:
                 raise self.http(404, u'{0} not found'.format(obj.__name__))
@@ -772,6 +777,7 @@ class DeferredTaskHandler(TransactionExecutorHandler):
                * 404 (environment is not found)
                * 409 (task with such parameters already exists)
         """
+        #取cluster
         cluster = self.get_object_or_404(
             objects.Cluster,
             cluster_id,
@@ -782,7 +788,9 @@ class DeferredTaskHandler(TransactionExecutorHandler):
             )
         )
 
+        #显示开始处理log
         logger.info(self.log_message.format(env_id=cluster_id))
+        #取action选项
         try:
             options = self.get_options()
         except ValueError as e:

@@ -51,6 +51,7 @@ class ClusterChanges(Base):
 class Cluster(Base):
     __tablename__ = 'clusters'
     id = Column(Integer, primary_key=True)
+    #集群模式
     mode = Column(
         Enum(*consts.CLUSTER_MODES, name='cluster_mode'),
         nullable=False,
