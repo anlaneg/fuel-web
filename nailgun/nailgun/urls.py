@@ -22,6 +22,7 @@ from nailgun.webui import urls as webui_urls
 
 def urls():
     urls = [
+            #对于v1及/api的均由api_urls.app来处理
         "/api/v1", api_urls.app(),
         "/api", api_urls.app(),
         "", webui_urls.app()

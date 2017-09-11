@@ -348,7 +348,7 @@ def action_yaql(params):
     from nailgun.fuyaql import fuyaql
     fuyaql.main(params.cluster_id)
 
-
+#服务启动入口
 def action_run(params):
     from nailgun.settings import settings
 
@@ -369,6 +369,7 @@ def action_run(params):
     if params.config_file:
         settings.update_from_file(params.config_file)
     from nailgun.app import appstart
+    #app启动
     appstart()
 
 

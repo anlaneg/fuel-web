@@ -394,7 +394,7 @@ feature_groups_urls = {
     )
 }
 
-
+#要么是url地址，要么是类名称
 urls = [i if isinstance(i, str) else i.__name__ for i in urls]
 
 _locals = locals()
@@ -447,6 +447,7 @@ def get_feature_groups_urls():
 def get_all_urls():
     """Merges urls and handlers from core and from extensions"""
     ext_urls = get_extensions_urls()
+    #载入本模块的urls
     all_urls = list(urls)
     all_urls.extend(get_feature_groups_urls())
     all_urls.extend(ext_urls['urls'])
