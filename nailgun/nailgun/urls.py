@@ -27,6 +27,7 @@ def urls():
         "/api", api_urls.app(),
         "", webui_urls.app()
     ]
+    #fake情况下,/keystone的地址自已处理
     if settings.AUTH['AUTHENTICATION_METHOD'] == 'fake':
         urls = ["/keystone", fake_keystone_urls.app()] + urls
     return urls

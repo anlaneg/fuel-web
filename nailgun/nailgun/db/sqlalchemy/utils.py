@@ -14,7 +14,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
+#构造dsn连接串
 def make_dsn(engine, host, port, user, passwd, name):
     """Constructs DSN string that can be used to connect to database.
 

@@ -352,6 +352,7 @@ def action_yaql(params):
 def action_run(params):
     from nailgun.settings import settings
 
+    #并入参数中的配置
     settings.update({
         'LISTEN_PORT': int(params.port),
         'LISTEN_ADDRESS': params.address,
@@ -366,6 +367,7 @@ def action_run(params):
         auth_method = params.authentication_method
         settings.AUTH.update({'AUTHENTICATION_METHOD': auth_method})
 
+    #如果参数中指定了配置文件，则也将其加入
     if params.config_file:
         settings.update_from_file(params.config_file)
     from nailgun.app import appstart

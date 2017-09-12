@@ -92,6 +92,7 @@ class NailgunObject(object):
         :param data: dictionary of key-value pairs as object fields
         :returns: instance of an object (model)
         """
+        #更新实际到数据库
         instance.update(data)
         db().add(instance)
         db().flush()

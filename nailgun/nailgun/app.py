@@ -88,12 +88,14 @@ def run_server(func, server_address=('0.0.0.0', 8080)):
 
 def appstart():
     logger.info("Fuel version: %s", str(settings.VERSION))
+    #检查数据库是否已创建
     if not engine.dialect.has_table(engine.connect(), "nodes"):
         logger.error(
             "Database tables not created. Try './manage.py syncdb' first"
         )
         sys.exit(1)
 
+    #启动wsgi 服务
     run_server(build_middleware(build_app().wsgifunc),
                (settings.LISTEN_ADDRESS, int(settings.LISTEN_PORT)))
 

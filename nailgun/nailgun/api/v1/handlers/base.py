@@ -815,7 +815,8 @@ class DeferredTaskHandler(TransactionExecutorHandler):
                 return self.start_transaction(cluster, transaction_options)
 
         try:
-
+            #构造此task的manager,并执行此任务
+            #对任务的执行，会导致消息发送
             task_manager = self.task_manager(cluster_id=cluster.id)
             task = task_manager.execute(**options)
         except (

@@ -85,6 +85,7 @@ class ClusterHandler(SingleHandler):
         # occur so they must be handled in order to form proper HTTP
         # response for user
         try:
+            #更新实例到数据库
             self.single.update(obj, data)
         except errors.NetworkTemplateCannotBeApplied as exc:
             raise self.http(400, exc.message)

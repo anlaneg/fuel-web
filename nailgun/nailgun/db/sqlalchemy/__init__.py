@@ -31,7 +31,7 @@ from nailgun.db import deadlock_detector as dd
 from nailgun.db.sqlalchemy import utils
 from nailgun.settings import settings
 
-
+#按配置生成与数据库的连接
 db_str = utils.make_dsn(**settings.DATABASE)
 engine = create_engine(db_str, client_encoding='utf8')
 

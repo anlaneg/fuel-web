@@ -232,6 +232,7 @@ class ApplyChangesTaskManager(BaseDeploymentTaskManager):
         db().commit()
         nodes_ids_to_deploy = ([node.id for node in nodes_to_provision_deploy]
                                if nodes_to_provision_deploy else None)
+        #任务将被异步执行
         mule.call_task_manager_async(
             self.__class__,
             '_execute_async',
@@ -410,6 +411,7 @@ class ApplyChangesTaskManager(BaseDeploymentTaskManager):
             )
             # we should have task committed for processing in other threads
             db().commit()
+            #构造向对端发送的rpc消息
             deployment_message = self._call_silently(
                 task_deployment,
                 deployment_task_provider,

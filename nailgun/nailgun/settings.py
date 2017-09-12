@@ -26,6 +26,7 @@ from nailgun.logger import logger
 
 class NailgunSettings(object):
     def __init__(self):
+        #构造配直文件位置
         settings_files = []
         logger.debug("Looking for settings.yaml package config "
                      "using old style __file__")
@@ -53,6 +54,7 @@ class NailgunSettings(object):
                 'passwd': ''
             }
         }
+        #加载配直
         for sf in settings_files:
             try:
                 logger.debug("Trying to read config file %s" % sf)
@@ -76,6 +78,7 @@ class NailgunSettings(object):
                 fuel_openstack_version
 
         if int(self.config.get("DEVELOPMENT", 0)):
+            #检查发现开发模式被打开了
             logger.info("DEVELOPMENT MODE ON:")
             here = os.path.abspath(
                 os.path.join(os.path.dirname(__file__), '..')
@@ -96,11 +99,13 @@ class NailgunSettings(object):
 
     def update_from_file(self, path):
         with open(path, "r") as custom_config:
+            #从yaml中加载数据并存放self.config
             self.config.update(
                 yaml.load(custom_config.read())
             )
 
     def get_file_content(self, path):
+        #读文件内容
         try:
             with open(path, "r") as f:
                 return f.read().strip()
